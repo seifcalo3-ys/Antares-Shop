@@ -11,78 +11,72 @@
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
         .btn { padding: 15px; background: #8B0000; color: white; border: none; border-radius: 10px; cursor: pointer; text-decoration: none; font-weight: bold; transition: 0.3s; }
         .btn:hover { background: #D32F2F; }
-        .admin-panel { background: #1a1a1a; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px dashed #8B0000; }
-        input { padding: 10px; width: 120px; border-radius: 5px; border: 1px solid #8B0000; background: #000; color: #fff; text-align: center; margin: 5px; }
+        
+        /* اللوحة كلها مخفية في البداية */
+        #adminArea { margin-top: 20px; }
         .hidden { display: none; }
+        
+        input { padding: 10px; width: 120px; border-radius: 5px; border: 1px solid #8B0000; background: #000; color: #fff; text-align: center; margin: 5px; }
     </style>
 </head>
 <body>
 
     <div class="main-card">
-        <h1>مرحباً بك يا ضعيف اتبحث عن القوة؟</h1>
+        <h1>مرحباً بك يا ضعيف أتبحث عن القوة؟</h1>
         <div class="xp-box">النقاط: <span id="xpDisplay">0</span></div>
 
-        <!-- أزرار التنقل -->
         <div class="menu-grid">
             <a href="shop.html" class="btn">🛒 المتجر</a>
             <a href="tasks.html" class="btn">⚔️ المهام</a>
         </div>
 
-        <!-- لوحة التحكم السرية للمطور -->
-        <div class="admin-panel">
-            <h3>🔒 لوحة المطور السرية</h3>
-            
-            <!-- نموذج إدخال الرقم السري (بيظهر الأول) -->
-            <div id="lockSection">
-                <input type="password" id="adminPassword" placeholder="أدخل رمز المطور">
-                <button class="btn" style="padding: 8px 15px;" onclick="checkPassword()">فتح القفل</button>
+        <div id="adminArea">
+            <div id="loginSection">
+                <input type="password" id="adminPassword" placeholder="رمز المطور">
+                <button class="btn" style="padding: 5px 10px; font-size: 12px;" onclick="checkPassword()">دخول</button>
             </div>
 
-            <!-- أدوات التزويد (مخفية ومش هتظهر إلا بالبصمة أو الرقم السري) -->
             <div id="toolsSection" class="hidden">
-                <p style="color: lime;">🔓 تم الدخول بنجاح يا زعيم</p>
-                <input type="number" id="addXpInput" placeholder="الكمية">
-                <button class="btn" style="padding: 8px 15px;" onclick="addXp()">زود نقاطي</button>
-                <br><br>
-                <button class="btn" style="background: #333; padding: 5px 10px; font-size: 12px;" onclick="lockPanel()">قفل اللوحة مجدداً</button>
+                <div style="border: 1px dashed #8B0000; padding: 15px; border-radius: 10px; background: #1a1a1a;">
+                    <p style="color: lime;">🔓 وضع المطور مفعل</p>
+                    <input type="number" id="addXpInput" placeholder="الكمية">
+                    <button class="btn" style="padding: 8px 15px;" onclick="addXp()">إضافة نقاط</button>
+                    <br><br>
+                    <button class="btn" style="background: #333; padding: 5px 10px; font-size: 12px;" onclick="lockPanel()">إغلاق</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // الرقم السري الافتراضي للموقع (تقدر تغيره من هنا لأي حاجة تحبها)
         const DEVELOPER_PASSWORD = "ANTARES2026"; 
 
         let xp = parseInt(localStorage.getItem('xp')) || 0;
         document.getElementById("xpDisplay").innerText = xp;
 
-        // دالة التحقق من الرقم السري
         function checkPassword() {
             let enteredPass = document.getElementById("adminPassword").value;
             if (enteredPass === DEVELOPER_PASSWORD) {
-                document.getElementById("lockSection").classList.add("hidden");
+                document.getElementById("loginSection").classList.add("hidden");
                 document.getElementById("toolsSection").classList.remove("hidden");
-                document.getElementById("adminPassword").value = ""; // مسح الخانة للأمان
+                document.getElementById("adminPassword").value = "";
             } else {
-                alert("الرمز السري خطأ! ❌ لا تحاول العبث مع نظام أوتاريس.");
+                alert("رمز خاطئ!");
             }
         }
 
-        // دالة تزويد النقاط
         function addXp() {
             let amount = parseInt(document.getElementById("addXpInput").value);
             if (!isNaN(amount)) {
                 xp += amount;
                 localStorage.setItem('xp', xp);
                 document.getElementById("xpDisplay").innerText = xp;
-                alert("تمت إضافة " + amount + " نقطة بنجاح! 🔥");
                 document.getElementById("addXpInput").value = "";
             }
         }
 
-        // دالة إعادة قفل اللوحة
         function lockPanel() {
-            document.getElementById("lockSection").classList.remove("hidden");
+            document.getElementById("loginSection").classList.remove("hidden");
             document.getElementById("toolsSection").classList.add("hidden");
         }
     </script>
