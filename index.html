@@ -3,40 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𝑨𝑵𝑻𝑨𝑹𝑬𝑺 - الرئيسية</title>
+    <title>لوحة تحكم 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</title>
     <style>
         body { background: #050505; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
-        .card { border: 2px solid #8B0000; padding: 20px; border-radius: 15px; background: #111; max-width: 500px; margin: auto; }
-        .menu-btn { 
-            display: block; width: 90%; margin: 15px auto; padding: 15px; 
-            background: #8B0000; color: white; text-decoration: none; 
-            border-radius: 10px; font-weight: bold; transition: 0.3s;
-        }
-        .menu-btn:hover { background: #D32F2F; transform: scale(1.05); }
-        h1 { color: #8B0000; text-shadow: 0 0 10px #8B0000; }
+        .main-card { border: 2px solid #8B0000; padding: 20px; border-radius: 20px; background: #111; max-width: 500px; margin: auto; }
+        .xp-box { font-size: 24px; color: gold; margin-bottom: 20px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn { padding: 15px; background: #8B0000; color: white; border: none; border-radius: 10px; cursor: pointer; text-decoration: none; font-weight: bold; }
+        .admin-panel { background: #222; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px dashed #8B0000; }
+        input { padding: 8px; width: 60px; border-radius: 5px; border: none; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>مرحباً بك في 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</h1>
-        <p>أين تريد الذهاب اليوم؟</p>
+    <div class="main-card">
+        <h1>مرحباً بك يا محارب</h1>
+        <div class="xp-box">النقاط: <span id="xpDisplay">0</span></div>
 
-        <!-- روابط التنقل -->
-        <a href="shop.html" class="menu-btn">🛒 المتجر</a>
-        <a href="tasks.html" class="menu-btn">⚔️ المهام اليومية</a>
-        <a href="inventory.html" class="menu-btn">📦 المخزون</a>
-    </div>
+        <div class="menu-grid">
+            <a href="shop.html" class="btn">🛒 المتجر</a>
+            <a href="tasks.html" class="btn">⚔️ المهام</a>
+        </div>
 
-    <!-- لوحة التحكم السرية للمطور -->
-    <div class="card" style="margin-top: 20px; border: 1px dashed gold;">
-        <small>النقاط الحالية: <span id="xpDisplay">0</span></small>
+        <div class="admin-panel">
+            <h3>لوحة المطور</h3>
+            <input type="number" id="addXpInput" placeholder="الكمية">
+            <button class="btn" onclick="addXp()">زود نقاطي</button>
+        </div>
     </div>
 
     <script>
-        // إظهار النقاط من التخزين المحلي
-        let xp = localStorage.getItem('xp') || 0;
+        let xp = parseInt(localStorage.getItem('xp')) || 0;
         document.getElementById("xpDisplay").innerText = xp;
+
+        function addXp() {
+            let amount = parseInt(document.getElementById("addXpInput").value);
+            if (!isNaN(amount)) {
+                xp += amount;
+                localStorage.setItem('xp', xp);
+                document.getElementById("xpDisplay").innerText = xp;
+            }
+        }
     </script>
 </body>
 </html>
