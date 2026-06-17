@@ -1,50 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <title>لوحة تحكم 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</title>
     <style>
-        body { background: #000; color: #ff4444; text-align: center; font-family: sans-serif; padding-top: 10%; }
-        h1 { font-size: 60px; text-shadow: 0 0 20px #ff0000; margin-bottom: 30px; }
-        .menu-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .menu-btn { 
-            width: 250px; 
-            padding: 20px; 
-            font-size: 18px; 
-            background: #111; 
-            color: #fff; 
-            border: 2px solid #8B0000; 
-            cursor: pointer; 
-            border-radius: 10px; 
-            font-weight: bold; 
-            transition: 0.3s;
-        }
-        .menu-btn:hover { background: #8B0000; box-shadow: 0 0 15px #8B0000; }
-        /* زر سري غير مرئي */
-        .admin-trigger { background: transparent; border: none; color: #111; cursor: pointer; margin-top: 50px; }
+        /* نفس التصميم السابق، مع إضافة ستايل للوحة التحكم */
+        body { background: #050505; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
+        .card { border: 2px solid #8B0000; padding: 15px; border-radius: 15px; background: #111; margin: 10px auto; max-width: 600px; }
+        .admin-panel { background: #222; padding: 10px; border-radius: 10px; margin-top: 10px; border: 1px dashed gold; }
+        button { background: #8B0000; color: white; padding: 8px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        input { padding: 8px; width: 80px; border-radius: 5px; border: none; }
     </style>
 </head>
 <body>
-    <h1>𝑨𝑵𝑻𝑨𝑹𝑬𝑺</h1>
-    
-    <div class="menu-container">
-        <button class="menu-btn" onclick="window.location.href='tasks.html'">المهام اليومية</button>
-        <button class="menu-btn" onclick="window.location.href='shop.html'">المتجر الملكي</button>
-        <button class="menu-btn" onclick="window.location.href='inventory.html'">المكافآت والأسلحة</button>
+
+    <div class="card">
+        <h1>سوق 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</h1>
+        <h3>النقاط المتاحة: <span id="xpDisplay">0</span></h3>
+        
+        <div class="admin-panel">
+            <h4>لوحة تحكم المطور (سرية)</h4>
+            <input type="number" id="addXpInput" placeholder="الكمية">
+            <button onclick="addXp()">زود نقاطي</button>
+            <br>
+            <input type="number" id="sendXpInput" placeholder="الكمية">
+            <button onclick="sendXp()">أرسل النقاط لصديق</button>
+        </div>
     </div>
 
-    <button class="admin-trigger" onclick="checkAdmin()">.</button>
-
     <script>
-        function checkAdmin() {
-            let pass = prompt("أدخل كود الوصول الملكي:");
-            if (pass === "ANTARES2026") {
-                localStorage.setItem('isAdmin', 'true');
-                alert("تم تفعيل صلاحيات الملك! الآن لديك وصول كامل لكل شيء.");
+        let xp = parseInt(localStorage.getItem('xp')) || 20000;
+        document.getElementById("xpDisplay").innerText = xp;
+
+        // دالة زيادة النقاط
+        function addXp() {
+            let amount = parseInt(document.getElementById("addXpInput").value);
+            xp += amount;
+            updateDisplay();
+        }
+
+        // دالة إرسال النقاط (محاكاة)
+        function sendXp() {
+            let amount = parseInt(document.getElementById("sendXpInput").value);
+            if (xp >= amount) {
+                xp -= amount;
+                alert("تم إرسال " + amount + " نقطة بنجاح إلى المحارب المختار!");
+                updateDisplay();
             } else {
-                alert("رمز خاطئ!");
+                alert("نقاطك لا تكفي للإرسال!");
             }
+        }
+
+        function updateDisplay() {
+            localStorage.setItem('xp', xp);
+            document.getElementById("xpDisplay").innerText = xp;
         }
     </script>
 </body>
 </html>
-
