@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>المخزن الإمبراطوري - 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</title>
+    <style>
+        body { background: #000; color: #fff; text-align: center; font-family: sans-serif; padding: 20px; }
+        .card { border: 2px solid #8B0000; padding: 20px; border-radius: 15px; background: #111; max-width: 450px; margin: auto; }
+        .inv-list { height: 350px; overflow-y: auto; text-align: right; border: 1px solid #444; padding: 10px; margin-top: 15px; border-radius: 5px; }
+        .weapon-card { border: 1px solid #444; padding: 10px; margin: 8px 0; border-radius: 10px; background: #1a1a1a; display: flex; align-items: center; }
+        .weapon-info { margin-left: 10px; }
+        .legendary { border: 2px solid gold; color: gold; padding: 15px; margin-bottom: 15px; font-weight: bold; border-radius: 10px; display: none; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>مخزنك الإمبراطوري</h1>
+        
+        <div id="antaresSword" class="legendary">
+            👑 سيف ملك التنانين - أنتاري (الرتبة الأسطورية)
+        </div>
+
+        <div id="rewardList" class="inv-list"></div>
+        
+        <button onclick="window.location.href='index.html'" style="background: #444; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 15px;">العودة للرئيسية</button>
+    </div>
+
+    <script>
+        let rewards = JSON.parse(localStorage.getItem('myRewards')) || [];
+        let list = document.getElementById("rewardList");
+        
+        if(rewards.length === 0) {
+            list.innerHTML = "<p style='text-align:center;'>مخزنك فارغ.. اذهب للمتجر أو ابدأ التدريب!</p>";
+        } else {
+            rewards.forEach(item => {
+                // عرض السلاح كبطاقة تحتوي تفاصيل
+                list.innerHTML += `
+                    <div class="weapon-card">
+                        <img src="${item.imgUrl || 'https://via.placeholder.com/50'}" width="50" height="50" style="border-radius:5px;">
+                        <div class="weapon-info">
+                            <strong>${item.name}</strong> <small style="color:gold;">[${item.rank}]</small><br>
+                            <small>⚔️ هجوم: ${item.attack} | 🛡️ دفاع: ${item.defense}</small><br>
+                            <small>✨ مهارة: ${item.skill}</small>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
