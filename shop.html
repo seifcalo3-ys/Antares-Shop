@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سوق 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</title>
+    <title>سوق 𝑨𝑵𝑻𝑨𝑹𝑬𝑺 المتطور</title>
     <style>
         body { background: #050505; color: #fff; font-family: sans-serif; margin: 0; padding: 10px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
         .card { border: 2px solid #8B0000; padding: 15px; border-radius: 20px; background: #111; width: 100%; max-width: 600px; margin-bottom: 20px; text-align: center; }
@@ -34,7 +34,7 @@
     <div id="shopItems" class="list"></div>
 
     <script>
-        let xp = parseInt(localStorage.getItem('xp')) || 20000;
+        let xp = parseInt(localStorage.getItem('xp')) || 0;
         let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
         
         function updateXP() { document.getElementById("xpDisplay").innerText = xp; localStorage.setItem('xp', xp); }
@@ -42,18 +42,28 @@
 
         const data = {
             swords: [
-                { name: "سيف الظل الملكي", price: 50000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/a0952790f10e975f6c9b8f337fed5e7d.jpg" },
-                { name: "قاطع الأرواح", price: 25000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/aff073c457fc9bb8480dc342dd5892a4.jpg" },
-                { name: "نصل التنين الفضي", price: 18000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/1535eaef2dbcf256de36ed2307dad0ac.jpg" },
-                { name: "شفرة العدالة", price: 12000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/2e6c1a53cc4d056fd484fd257d374945.jpg" },
-                { name: "رمح الرعد", price: 8500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/2902f86a968e63bad4d7e9dc5b29d3cd.jpg" }
+                { name: "سيف المبتدئ", price: 150, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/a0952790f10e975f6c9b8f337fed5e7d.jpg" },
+                { name: "سيف الفولاذ البارد", price: 300, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/aff073c457fc9bb8480dc342dd5892a4.jpg" },
+                { name: "نصل الرياح", price: 500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/1535eaef2dbcf256de36ed2307dad0ac.jpg" },
+                { name: "سيف الفراغ", price: 750, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/2e6c1a53cc4d056fd484fd257d374945.jpg" },
+                { name: "رمح الرعد", price: 1000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/2902f86a968e63bad4d7e9dc5b29d3cd.jpg" },
+                { name: "مطرقة التيتان", price: 1200, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/aa28c8389f1f4d146b70f5b6333d7e6c.jpg" },
+                { name: "شفرة العدالة", price: 1500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/47fe8efa0a6473ccb9ba7bab8156e120.jpg" },
+                { name: "نصل التنين", price: 1800, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/10589290957e9f314ba6e3cf8249d06a.jpg" },
+                { name: "قاطع الأرواح", price: 2000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/318d87faa8267c5bc8d251553f3d7b15.jpg" },
+                { name: "سيف الظل الملكي", price: 2500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/a0952790f10e975f6c9b8f337fed5e7d.jpg" }
             ],
             daggers: [
-                { name: "خنجر السم الأرجواني", price: 9000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/251c325f580264b8aa9eb64aff95770d.jpg" },
-                { name: "خنجر النصل المزدوج", price: 6500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/1a2e7457fdcdc4b288c3d59378b5f856.jpg" },
-                { name: "خنجر الظل الغامض", price: 6000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/a509e474917cf61f72a948576189b8b1.jpg" },
-                { name: "خنجر الدم القرمزي", price: 4500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/924638affb4662c2142c439d6e8666db.jpg" },
-                { name: "خنجر الصقيع", price: 4000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/464f4e2b56643dc9f18af837d147ca58.jpg" }
+                { name: "خنجر الحارس القديم", price: 100, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/40afbc88ea6bbd4d43fd7e9fa749fd30.jpg" },
+                { name: "خنجر الرياح الهادئة", price: 200, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/4fc672ace82511d98ae443c88f7f9d9f.jpg" },
+                { name: "خنجر البرق الخاطف", price: 300, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/36c78567203296bcb5b1a8b7a3c8a5fd.jpg" },
+                { name: "خنجر الصقيع", price: 400, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/464f4e2b56643dc9f18af837d147ca58.jpg" },
+                { name: "خنجر الدم القرمزي", price: 500, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/924638affb4662c2142c439d6e8666db.jpg" },
+                { name: "خنجر النيران", price: 600, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/b5e9f036985276e89440fc312b5c0a62.jpg" },
+                { name: "خنجر الظل الغامض", price: 700, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/a509e474917cf61f72a948576189b8b1.jpg" },
+                { name: "خنجر النصل المزدوج", price: 800, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/1a2e7457fdcdc4b288c3d59378b5f856.jpg" },
+                { name: "خنجر السم الأرجواني", price: 900, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/251c325f580264b8aa9eb64aff95770d.jpg" },
+                { name: "خنجر الأثير الأسود", price: 1000, img: "https://raw.githubusercontent.com/seifcalo3-ys/Antares-Assets/main/ac80bf85ce83bdef4dc477701a046ac7.jpg" }
             ]
         };
 
@@ -64,7 +74,7 @@
                 localStorage.setItem('myInventory', JSON.stringify(inventory));
                 updateXP();
                 alert("تم شراء " + name + " بنجاح!");
-                showCategory('inventory', null); // تحديث العرض بعد الشراء
+                showCategory('inventory', null); 
             } else {
                 alert("نقاطك غير كافية يا محارب!");
             }
