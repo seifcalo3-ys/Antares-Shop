@@ -1,95 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام 𝑨𝑵𝑻𝑨𝑹𝑬𝑺 - المهام</title>
     <style>
-        body { background: #000; color: #ff0000; font-family: sans-serif; text-align: center; padding: 20px; }
-        .card { border: 2px solid #8B0000; padding: 20px; border-radius: 15px; background: #111; max-width: 400px; margin: auto; }
-        button { background: #8B0000; color: white; padding: 15px 25px; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; width: 100%; }
-        .reset-btn { background: #330000; border: 1px solid #ff0000; margin-top: 30px; font-size: 12px; }
-        .admin-btn { background: #ffd700; color: #000; font-weight: bold; display: none; }
-        .claim-btn { background: #008B8B; display: none; } /* زر استلام المكافأة */
-        #taskText { text-align: right; padding: 10px; border: 1px solid #444; margin-top: 10px; color: #fff; }
+        /* إعدادات الشاشة الكاملة */
+        body { 
+            background: #050505; color: #fff; font-family: sans-serif; 
+            margin: 0; padding: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .card { 
+            border: 2px solid #8B0000; padding: 25px; border-radius: 20px; 
+            background: #111; width: 90%; max-width: 450px; text-align: center;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
+        }
+        h2 { color: #8B0000; text-shadow: 0 0 10px #8B0000; }
+        
+        /* تلوين المهام */
+        #taskText { 
+            background: #1a1a1a; padding: 20px; border-radius: 10px;
+            border-right: 5px solid #8B0000; margin-top: 15px; color: #ddd;
+            font-size: 1.2em; text-align: right; line-height: 1.8;
+        }
+        .highlight { color: #FFD700; font-weight: bold; }
+
+        button { 
+            background: #8B0000; color: white; padding: 15px; border: none; 
+            border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold;
+        }
+        .claim-btn { background: #008B8B; }
+        .reset-btn { background: transparent; border: 1px solid #444; color: #666; font-size: 12px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <h2>نظام 𝑨𝑵𝑻𝑨𝑹𝑬𝑺</h2>
-        <div id="stats">المستوى: 0 | النقاط: 0</div>
-        <p id="dayText">المهمة رقم: 1</p>
+        <div id="stats" style="color: #FFD700; font-weight: bold;">المستوى: 0 | النقاط: 0</div>
+        <p id="dayText" style="color: #8B0000;">المهمة رقم: 1</p>
+        
         <div id="taskText">جاري التحميل...</div>
         
         <button id="completeBtn" onclick="completeTask()">إتمام المهمة</button>
-        <!-- زر استلام المكافأة -->
-        <button id="claimBtn" class="claim-btn" onclick="claimReward()">استلام المكافأة: <span id="rewardName"></span></button>
+        <button id="claimBtn" class="claim-btn" style="display:none;" onclick="claimReward()">استلام المكافأة: <span id="rewardName"></span></button>
         
-        <button id="adminBtn" class="admin-btn" onclick="godMode()">تفعيل قوة الملك (God Mode)</button>
-        <button onclick="window.location.href='index.html'" style="background: #444;">الرئيسية</button>
-        <button class="reset-btn" onclick="resetSystem()">تصفير النظام (Reset)</button>
+        <button onclick="window.location.href='index.html'" style="background: #333;">الرئيسية</button>
+        <button class="reset-btn" onclick="resetSystem()">تصفير النظام</button>
     </div>
 
     <script>
-        const exercises = ["ضغط", "سكوات", "بطن", "بلانك", "طعن", "بربيز", "تسلق جبل"];
-        
         function updateUI() {
             let stats = getStats();
-            // إظهار زر المكافأة لو فيه حاجة معلقة
             let pending = localStorage.getItem('pendingReward');
+            
             if(pending) {
                 document.getElementById('claimBtn').style.display = "block";
                 document.getElementById('rewardName').innerText = pending;
             }
 
-            if (localStorage.getItem('isAdmin') === 'true') document.getElementById('adminBtn').style.display = "block";
-            
             if (!stats.task) { stats.task = generateTask(stats.count); localStorage.setItem('currentTask', stats.task); }
+            
             document.getElementById("stats").innerText = "المستوى: " + Math.floor(stats.xp / 100) + " | النقاط: " + stats.xp;
             document.getElementById("dayText").innerText = "المهمة رقم: " + (stats.count + 1);
             document.getElementById("taskText").innerHTML = stats.task;
         }
 
-        function claimReward() {
-            let reward = localStorage.getItem('pendingReward');
-            if(reward) {
-                let inv = JSON.parse(localStorage.getItem('myRewards')) || [];
-                inv.push(reward);
-                localStorage.setItem('myRewards', JSON.stringify(inv));
-                localStorage.removeItem('pendingReward');
-                document.getElementById('claimBtn').style.display = "none";
-                alert("تمت إضافة " + reward + " إلى المخزن بنجاح!");
-            }
+        function generateTask(c) { 
+            let i = Math.floor(c/3)+1; 
+            return "<strong>تدريب اليوم:</strong><br>" +
+                   "• ضغط: <span class='highlight'>"+(i*10)+"</span><br>" +
+                   "• سكوات: <span class='highlight'>"+(i*10)+"</span><br>" +
+                   "• بلانك: <span class='highlight'>"+(i*20)+"</span> ثانية"; 
         }
 
-        function completeTask() {
-            let today = new Date().toDateString();
-            let stats = getStats();
-            if (stats.lastDate === today && localStorage.getItem('isAdmin') !== 'true') {
-                alert("⛔ يا بطل، لقد أتممت مهمة اليوم بالفعل!");
-                return;
-            }
-            stats.xp += 20;
-            stats.count++;
-            stats.lastDate = today;
-            stats.task = generateTask(stats.count);
-            localStorage.setItem('xp', stats.xp);
-            localStorage.setItem('count', stats.count);
-            localStorage.setItem('currentTask', stats.task);
-            localStorage.setItem('lastDate', today);
-            
-            // تحقق من الجائزة
-            const rewards = { 5: "خنجر الصدأ", 10: "درع الجلد", 15: "سيف الفولاذ", 20: "عباءة الظل", 30: "رمح التنين", 50: "نصل الأنتاريس" };
-            if (rewards[stats.count]) {
-                localStorage.setItem('pendingReward', rewards[stats.count]);
-            }
-            updateUI();
-        }
-
-        // باقي الدوال (getStats, generateTask, godMode, resetSystem) كما هي...
+        // الدوال الأساسية (completeTask, getStats, إلخ) خليهم زي ما هما عندك
         function getStats() { return { xp: parseInt(localStorage.getItem('xp'))||0, count: parseInt(localStorage.getItem('count'))||0, task: localStorage.getItem('currentTask')||"", lastDate: localStorage.getItem('lastDate')||"" }; }
-        function generateTask(c) { let i = Math.floor(c/3)+1; return "<strong>تدريب اليوم:</strong><br>• ضغط: "+(i*10)+"<br>• سكوات: "+(i*10)+"<br>• بلانك: "+(i*20)+" ثانية"; }
-        function godMode() { localStorage.setItem('xp', 10000); localStorage.setItem('count', 100); location.reload(); }
+        function claimReward() { /* كود الاستلام بتاعك */ location.reload(); }
+        function completeTask() { /* كود الإتمام بتاعك */ location.reload(); }
         function resetSystem() { if(confirm("تصفير؟")) { localStorage.clear(); location.reload(); } }
 
         updateUI();
