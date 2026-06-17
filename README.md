@@ -1,1 +1,49 @@
-# Antares-Shop
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { background: #000; color: #ff4444; text-align: center; font-family: sans-serif; padding-top: 10%; }
+        h1 { font-size: 60px; text-shadow: 0 0 20px #ff0000; margin-bottom: 30px; }
+        .menu-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .menu-btn { 
+            width: 250px; 
+            padding: 20px; 
+            font-size: 18px; 
+            background: #111; 
+            color: #fff; 
+            border: 2px solid #8B0000; 
+            cursor: pointer; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            transition: 0.3s;
+        }
+        .menu-btn:hover { background: #8B0000; box-shadow: 0 0 15px #8B0000; }
+        /* زر سري غير مرئي */
+        .admin-trigger { background: transparent; border: none; color: #111; cursor: pointer; margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <h1>𝑨𝑵𝑻𝑨𝑹𝑬𝑺</h1>
+    
+    <div class="menu-container">
+        <button class="menu-btn" onclick="window.location.href='tasks.html'">المهام اليومية</button>
+        <button class="menu-btn" onclick="window.location.href='shop.html'">المتجر الملكي</button>
+        <button class="menu-btn" onclick="window.location.href='inventory.html'">المكافآت والأسلحة</button>
+    </div>
+
+    <button class="admin-trigger" onclick="checkAdmin()">.</button>
+
+    <script>
+        function checkAdmin() {
+            let pass = prompt("أدخل كود الوصول الملكي:");
+            if (pass === "ANTARES2026") {
+                localStorage.setItem('isAdmin', 'true');
+                alert("تم تفعيل صلاحيات الملك! الآن لديك وصول كامل لكل شيء.");
+            } else {
+                alert("رمز خاطئ!");
+            }
+        }
+    </script>
+</body>
+</html>
