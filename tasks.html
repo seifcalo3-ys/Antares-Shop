@@ -5,31 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام 𝑨𝑵𝑻𝑨𝑹𝑬𝑺 - المهام</title>
     <style>
-        /* إعدادات الشاشة الكاملة */
-        body { 
-            background: #050505; color: #fff; font-family: sans-serif; 
-            margin: 0; padding: 0; min-height: 100vh;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .card { 
-            border: 2px solid #8B0000; padding: 25px; border-radius: 20px; 
-            background: #111; width: 90%; max-width: 450px; text-align: center;
-            box-shadow: 0 0 20px rgba(139, 0, 0, 0.3);
-        }
+        body { background: #050505; color: #fff; font-family: sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .card { border: 2px solid #8B0000; padding: 25px; border-radius: 20px; background: #111; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 0 20px rgba(139, 0, 0, 0.3); }
         h2 { color: #8B0000; text-shadow: 0 0 10px #8B0000; }
-        
-        /* تلوين المهام */
-        #taskText { 
-            background: #1a1a1a; padding: 20px; border-radius: 10px;
-            border-right: 5px solid #8B0000; margin-top: 15px; color: #ddd;
-            font-size: 1.2em; text-align: right; line-height: 1.8;
-        }
-        .highlight { color: #FFD700; font-weight: bold; }
-
-        button { 
-            background: #8B0000; color: white; padding: 15px; border: none; 
-            border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold;
-        }
+        #taskText { background: #1a1a1a; padding: 20px; border-radius: 10px; border-right: 5px solid #8B0000; margin-top: 15px; color: #ddd; font-size: 1.2em; text-align: right; line-height: 1.8; }
+        .highlight { color: #FFD700; font-weight: bold; font-size: 1.2em; }
+        button { background: #8B0000; color: white; padding: 15px; border: none; border-radius: 10px; cursor: pointer; margin-top: 15px; width: 100%; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #D32F2F; transform: scale(1.02); }
         .claim-btn { background: #008B8B; }
         .reset-btn { background: transparent; border: 1px solid #444; color: #666; font-size: 12px; margin-top: 20px; }
     </style>
@@ -53,33 +35,65 @@
     <script>
         function updateUI() {
             let stats = getStats();
-            let pending = localStorage.getItem('pendingReward');
+            let today = new Date().toDateString();
             
+            document.getElementById("stats").innerText = "المستوى: " + Math.floor(stats.xp / 100) + " | النقاط: " + stats.xp;
+            document.getElementById("dayText").innerText = "المهمة رقم: " + (stats.count + 1);
+
+            if (stats.lastDate === today) {
+                document.getElementById('completeBtn').style.display = "none";
+                document.getElementById('taskText').innerHTML = "⏳ <strong style='color:#8B0000;'>تمت المهمة!</strong><br>عد إلينا غداً لمواصلة التدريب يا بطل.";
+            } else {
+                if (!stats.task) { stats.task = generateTask(stats.count); localStorage.setItem('currentTask', stats.task); }
+                document.getElementById("taskText").innerHTML = stats.task;
+            }
+
+            let pending = localStorage.getItem('pendingReward');
             if(pending) {
                 document.getElementById('claimBtn').style.display = "block";
                 document.getElementById('rewardName').innerText = pending;
             }
-
-            if (!stats.task) { stats.task = generateTask(stats.count); localStorage.setItem('currentTask', stats.task); }
-            
-            document.getElementById("stats").innerText = "المستوى: " + Math.floor(stats.xp / 100) + " | النقاط: " + stats.xp;
-            document.getElementById("dayText").innerText = "المهمة رقم: " + (stats.count + 1);
-            document.getElementById("taskText").innerHTML = stats.task;
         }
 
         function generateTask(c) { 
             let i = Math.floor(c/3)+1; 
-            return "<strong>تدريب اليوم:</strong><br>" +
-                   "• ضغط: <span class='highlight'>"+(i*10)+"</span><br>" +
-                   "• سكوات: <span class='highlight'>"+(i*10)+"</span><br>" +
-                   "• بلانك: <span class='highlight'>"+(i*20)+"</span> ثانية"; 
+            return `
+                <div style="text-align: right;">
+                    <strong style="color: #FF4500; font-size: 1.3em;">تدريب اليوم:</strong><br><br>
+                    <span style="color: #00CED1;">• ضغط:</span> <span class='highlight'>${i*10}</span><br>
+                    <span style="color: #32CD32;">• سكوات:</span> <span class='highlight'>${i*10}</span><br>
+                    <span style="color: #FFD700;">• بلانك:</span> <span class='highlight'>${i*20}</span> ثانية
+                </div>
+            `;
         }
 
-        // الدوال الأساسية (completeTask, getStats, إلخ) خليهم زي ما هما عندك
+        function completeTask() {
+            let today = new Date().toDateString();
+            let stats = getStats();
+            stats.xp += 20;
+            stats.count++;
+            stats.lastDate = today;
+            stats.task = generateTask(stats.count);
+            localStorage.setItem('xp', stats.xp);
+            localStorage.setItem('count', stats.count);
+            localStorage.setItem('lastDate', today);
+            localStorage.setItem('currentTask', stats.task);
+            const rewards = { 5: "خنجر الصدأ", 10: "درع الجلد", 15: "سيف الفولاذ", 20: "عباءة الظل", 30: "رمح التنين", 50: "نصل الأنتاريس" };
+            if (rewards[stats.count]) localStorage.setItem('pendingReward', rewards[stats.count]);
+            location.reload();
+        }
+
+        function claimReward() {
+            let reward = localStorage.getItem('pendingReward');
+            if(reward) {
+                alert("تهانينا! حصلت على: " + reward);
+                localStorage.removeItem('pendingReward');
+                location.reload();
+            }
+        }
+
         function getStats() { return { xp: parseInt(localStorage.getItem('xp'))||0, count: parseInt(localStorage.getItem('count'))||0, task: localStorage.getItem('currentTask')||"", lastDate: localStorage.getItem('lastDate')||"" }; }
-        function claimReward() { /* كود الاستلام بتاعك */ location.reload(); }
-        function completeTask() { /* كود الإتمام بتاعك */ location.reload(); }
-        function resetSystem() { if(confirm("تصفير؟")) { localStorage.clear(); location.reload(); } }
+        function resetSystem() { if(confirm("هل أنت متأكد من تصفير النظام؟")) { localStorage.clear(); location.reload(); } }
 
         updateUI();
     </script>
